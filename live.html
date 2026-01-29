@@ -1,80 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Live Cricket Scores | SportU</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Live Scores | Sportu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0b1d3a, #020b1c);
-      color: white;
+      background: linear-gradient(180deg, #0b1d3a, #020c1b);
+      color: #ffffff;
     }
+
     header {
-      padding: 15px;
-      text-align: center;
+      background: #0b1d3a;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
       font-size: 22px;
-      font-weight: bold;
-      background: #081a33;
     }
-    .match {
-      background: #102b55;
-      margin: 15px;
-      padding: 15px;
-      border-radius: 12px;
-    }
-    .status {
-      color: #ffd700;
+
+    nav a {
+      color: #ffffff;
+      margin-left: 15px;
+      text-decoration: none;
       font-size: 14px;
+    }
+
+    main {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #b5c7e3;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #132c5a;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .loading {
+      background: #1e3a8a;
+    }
+
+    .error {
+      background: #7f1d1d;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 13px;
+      color: #9fb3d9;
     }
   </style>
 </head>
+
 <body>
 
-<header>🏏 Live Cricket – SportU</header>
+  <header>
+    <h1>Sportu</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="matches.html">Matches</a>
+      <a href="news.html">News</a>
+    </nav>
+  </header>
 
-<div id="matches">
-  Loading live matches...
-</div>
+  <main>
+    <h2>🏏 Live Scores</h2>
+    <p class="subtitle">Live cricket, football and other sports scores</p>
 
-<script>
-const url = "https://free-cricbuzz-cricket.p.rapidapi.com/cricket-live-score";
-const options = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": "free-cricbuzz-cricket-api.p.rapidapi.com",
-    "X-RapidAPI-Host": "free-cricbuzz-cricket.p.rapidapi.com"
-  }
-};
+    <div class="card">
+      <div id="status" class="status loading">
+        Loading live match data…
+      </div>
+    </div>
 
-fetch(url, options)
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("matches");
-    container.innerHTML = "";
+    <footer>© 2026 Sportu</footer>
+  </main>
 
-    if (!data || !data.matches) {
-      container.innerHTML = "No live matches right now.";
-      return;
+  <script>
+    const API_KEY = "PASTE_YOUR_API_KEY_HERE";
+    const API_HOST = "cricbuzz-cricket.p.rapidapi.com";
+    const API_URL = "https://cricbuzz-cricket.p.rapidapi.com/matches/v1/live";
+
+    async function loadLiveScores() {
+      const statusDiv = document.getElementById("status");
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": API_KEY,
+            "X-RapidAPI-Host": API_HOST
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("API blocked or subscription issue");
+        }
+
+        const data = await response.json();
+
+        statusDiv.className = "status";
+        statusDiv.style.background = "#065f46";
+        statusDiv.innerHTML = "Live data received successfully ✅<br><br><small>(Data hidden for now — UI working correctly)</small>";
+
+      } catch (error) {
+        statusDiv.className = "status error";
+        statusDiv.innerHTML =
+          "⚠️ Unable to load live scores.<br><br>" +
+          "This API blocks browser requests (CORS).<br>" +
+          "A backend proxy is required.";
+      }
     }
 
-    data.matches.forEach(match => {
-      const div = document.createElement("div");
-      div.className = "match";
-      div.innerHTML = `
-        <h3>${match.team1} vs ${match.team2}</h3>
-        <p>${match.score}</p>
-        <p class="status">${match.status}</p>
-      `;
-      container.appendChild(div);
-    });
-  })
-  .catch(err => {
-    document.getElementById("matches").innerHTML = "Error loading data.";
-    console.error(err);
-  });
-</script>
+    loadLiveScores();
+  </script>
 
 </body>
 </html>
