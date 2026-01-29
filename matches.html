@@ -1,35 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Matches – SportU</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<header>
-  <h1>Matches</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="tournaments.html">Tournaments</a>
-  </nav>
-</header>
-
-<div class="container" id="matches"></div>
-
 <script src="data.js"></script>
 <script>
   const container = document.getElementById("matches");
 
-  matches.forEach(match => {
+  const savedMatches = JSON.parse(localStorage.getItem("matches")) || [];
+  const allMatches = [...matches, ...savedMatches];
+
+  if (allMatches.length === 0) {
+    container.innerHTML = "No matches created yet.";
+  }
+
+  allMatches.forEach(match => {
     container.innerHTML += `
       <div class="card">
         <h3>${match.team1} vs ${match.team2}</h3>
-        <p>${match.date}</p>
+        <p>${match.date} | ${match.venue}</p>
         <a href="match.html?id=${match.id}">View Match</a>
       </div>
     `;
   });
 </script>
-
-</body>
-</html>
