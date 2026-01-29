@@ -1,47 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Matches | SportU</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>🏏 Matches</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="tournaments.html">Tournaments</a>
-    <a href="create-match.html">➕ Create Match</a>
-  </nav>
-</header>
+<h2>🏏 Matches</h2>
+<a href="create-match.html">➕ Create Match</a>
 
-<div class="container" id="matches"></div>
+<div id="matchList"></div>
 
 <script src="data.js"></script>
 <script>
-  const container = document.getElementById("matches");
+const container = document.getElementById("matchList");
+const allMatches = getAllMatches();
 
-  // Get matches created by user
-  const savedMatches = JSON.parse(localStorage.getItem("matches")) || [];
+if (allMatches.length === 0) {
+  container.innerHTML = "<p>No matches created yet.</p>";
+}
 
-  // Combine default + created matches
-  const allMatches = [...matches, ...savedMatches];
-
-  if (allMatches.length === 0) {
-    container.innerHTML = "<p>No matches created yet.</p>";
-  }
-
-  allMatches.forEach(match => {
-    container.innerHTML += `
-      <div class="card">
-        <h3>${match.team1} vs ${match.team2}</h3>
-        <p>${match.date} | ${match.venue}</p>
-        <p>Status: ${match.status}</p>
-        <a href="match.html?id=${match.id}">View Match</a>
-      </div>
-    `;
-  });
+allMatches.forEach(match => {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <h3>${match.team1} vs ${match.team2}</h3>
+    <p>${match.date} | ${match.venue}</p>
+    <p>Status: ${match.status}</p>
+    <a href="match.html?id=${match.id}">View Match</a>
+  `;
+  container.appendChild(div);
+});
 </script>
 
 </body>
