@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tournaments – SportU</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Tournaments</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="matches.html">Matches</a>
+  </nav>
+</header>
+
+<div class="container" id="tournaments"></div>
+
+<script src="data.js"></script>
+<script>
+  tournaments.forEach(t => {
+    document.getElementById("tournaments").innerHTML += `
+      <div class="card">
+        <h3>${t.name}</h3>
+        <p>${t.location}</p>
+        <a href="tournament.html?id=${t.id}">View</a>
+      </div>
+    `;
+  });
+</script>
+
+</body>
+</html>
