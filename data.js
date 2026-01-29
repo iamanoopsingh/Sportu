@@ -1,6 +1,9 @@
 <script>
-/* ---------- DEFAULT DEMO MATCHES ---------- */
-const matches = [
+/* ===============================
+   DEFAULT DEMO MATCHES
+   (You can delete these later)
+================================ */
+const defaultMatches = [
   {
     id: 1,
     team1: "India",
@@ -25,22 +28,28 @@ const matches = [
   }
 ];
 
-/* ---------- LOCAL STORAGE ---------- */
+/* ===============================
+   LOCAL STORAGE HELPERS
+================================ */
 function getSavedMatches() {
   return JSON.parse(localStorage.getItem("matches")) || [];
 }
 
 function saveMatch(match) {
-  const existing = getSavedMatches();
-  existing.push(match);
-  localStorage.setItem("matches", JSON.stringify(existing));
+  const matches = getSavedMatches();
+  matches.push(match);
+  localStorage.setItem("matches", JSON.stringify(matches));
 }
 
 function getAllMatches() {
-  return [...matches, ...getSavedMatches()];
+  return [...defaultMatches, ...getSavedMatches()];
 }
 
 function getMatchById(id) {
-  return getAllMatches().find(m => m.id == id);
+  return getAllMatches().find(match => match.id == id);
 }
-</script>
+
+function updateMatch(updatedMatch) {
+  let matches = getSavedMatches();
+  matches = matches.map(m => m.id == updatedMatch.id ? updatedMatch : m);
+  localStorage.setItem("matches",
