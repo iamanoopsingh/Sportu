@@ -70,10 +70,78 @@
 
     .error {
       background: #7f1d1d;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upcoming Matches | SportU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1d3a, #020c1b);
+      color: #ffffff;
+    }
+
+    header {
+      background: #0b1d3a;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    nav a {
+      color: #ffffff;
+      margin-left: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    main {
+      padding: 25px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b5c7e3;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .match-card {
+      background: #1e3a8a;
+      margin-bottom: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+
+    .match-card strong {
+      font-size: 15px;
+    }
+
+    .match-meta {
+      font-size: 13px;
+      color: #dbeafe;
+      margin-top: 6px;
     }
 
     footer {
-      margin-top: 60px;
+      margin-top: 40px;
+      text-align: center;
       font-size: 13px;
       color: #9fb3d9;
     }
@@ -83,7 +151,7 @@
 <body>
 
   <header>
-    <h1>Sportu</h1>
+    <h1>SportU</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="matches.html">Matches</a>
@@ -92,55 +160,59 @@
   </header>
 
   <main>
-    <h2>🏏 Live Scores</h2>
-    <p class="subtitle">Live cricket, football and other sports scores</p>
+    <h2>📅 Upcoming Cricket Matches</h2>
+    <p class="subtitle">Stay updated with scheduled cricket matches</p>
 
-    <div class="card">
-      <div id="status" class="status loading">
-        Loading live match data…
-      </div>
-    </div>
+    <div id="matches">Loading upcoming matches…</div>
 
-    <footer>© 2026 Sportu</footer>
+    <footer>© 2026 SportU</footer>
   </main>
 
   <script>
-    const API_KEY = "PASTE_YOUR_API_KEY_HERE";
-    const API_HOST = "cricbuzz-cricket.p.rapidapi.com";
-    const API_URL = "https://cricbuzz-cricket.p.rapidapi.com/matches/v1/live";
+    const container = document.getElementById("matches");
 
-    async function loadLiveScores() {
-      const statusDiv = document.getElementById("status");
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "PASTE_YOUR_API_KEY_HERE",
+        "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com"
+      }
+    };
 
-      try {
-        const response = await fetch(API_URL, {
-          method: "GET",
-          headers: {
-            "X-RapidAPI-Key": API_KEY,
-            "X-RapidAPI-Host": API_HOST
-          }
-        });
+    fetch("https://cricbuzz-cricket.p.rapidapi.com/matches/v1/upcoming", options)
+      .then(response => response.json())
+      .then(data => {
+        container.innerHTML = "";
 
-        if (!response.ok) {
-          throw new Error("API blocked or subscription issue");
+        if (!data || !data.typeMatches) {
+          container.innerHTML = "No upcoming matches found.";
+          return;
         }
 
-        const data = await response.json();
+        data.typeMatches.forEach(type => {
+          type.seriesMatches.forEach(series => {
+            if (!series.seriesAdWrapper) return;
 
-        statusDiv.className = "status";
-        statusDiv.style.background = "#065f46";
-        statusDiv.innerHTML = "Live data received successfully ✅<br><br><small>(Data hidden for now — UI working correctly)</small>";
-
-      } catch (error) {
-        statusDiv.className = "status error";
-        statusDiv.innerHTML =
-          "⚠️ Unable to load live scores.<br><br>" +
-          "This API blocks browser requests (CORS).<br>" +
-          "A backend proxy is required.";
-      }
-    }
-
-    loadLiveScores();
+            series.seriesAdWrapper.matches.forEach(match => {
+              const info = match.matchInfo;
+              const div = document.createElement("div");
+              div.className = "match-card";
+              div.innerHTML = `
+                <strong>${info.team1.teamName} vs ${info.team2.teamName}</strong>
+                <div class="match-meta">
+                  🏟 ${info.venueInfo.ground}, ${info.venueInfo.city}<br>
+                  ⏰ ${new Date(info.startDate).toLocaleString()}
+                </div>
+              `;
+              container.appendChild(div);
+            });
+          });
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        container.innerHTML = "Unable to load matches at the moment.";
+      });
   </script>
 
 </body>
