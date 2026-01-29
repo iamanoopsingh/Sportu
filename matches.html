@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Matches - Sportu</title>
+  <title>Matches – SportU</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>Sportu</h1>
+  <h1>Matches</h1>
   <nav>
     <a href="index.html">Home</a>
-    <a href="live.html">Live</a>
-    <a href="news.html">News</a>
+    <a href="tournaments.html">Tournaments</a>
   </nav>
 </header>
 
-<main class="container">
-  <h2>📅 Upcoming Matches</h2>
-  <ul>
-    <li>India vs Australia</li>
-    <li>England vs South Africa</li>
-    <li>IPL 2026 – Match Schedule</li>
-  </ul>
-</main>
+<div class="container" id="matches"></div>
 
-<footer>
-  © 2026 Sportu
-</footer>
+<script src="data.js"></script>
+<script>
+  const container = document.getElementById("matches");
+
+  matches.forEach(match => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${match.team1} vs ${match.team2}</h3>
+        <p>${match.date}</p>
+        <a href="match.html?id=${match.id}">View Match</a>
+      </div>
+    `;
+  });
+</script>
 
 </body>
 </html>
