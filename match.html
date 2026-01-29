@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Match – SportU</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" id="match"></div>
+
+<script src="data.js"></script>
+<script>
+  const id = new URLSearchParams(window.location.search).get("id");
+  const match = matches.find(m => m.id == id);
+
+  document.getElementById("match").innerHTML = `
+    <h2>${match.team1} vs ${match.team2}</h2>
+    <p>Date: ${match.date}</p>
+    <p>Venue: ${match.venue}</p>
+    <p>Status: ${match.status}</p>
+  `;
+</script>
+
+</body>
+</html>
