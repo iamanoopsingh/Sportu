@@ -122,98 +122,161 @@
     }
 
     .match-card {
-      background: #1e3a8a;
-      margin-bottom: 14px;
-      padding: 14px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SportU – Live Cricket Scores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #061a33, #020b18);
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #031126;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    nav a {
+      color: #cfe4ff;
+      margin-left: 15px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    main {
+      padding: 30px 16px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9fbbe7;
+      margin-bottom: 25px;
+    }
+
+    .match {
+      background: #0a2548;
       border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+      padding: 16px;
+      margin-bottom: 15px;
+      text-align: left;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
-    .match-card strong {
-      font-size: 15px;
+    .match h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
     }
 
-    .match-meta {
-      font-size: 13px;
-      color: #dbeafe;
-      margin-top: 6px;
+    .match p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #d6e6ff;
     }
 
     footer {
-      margin-top: 40px;
       text-align: center;
+      padding: 20px;
       font-size: 13px;
-      color: #9fb3d9;
+      color: #8faad6;
     }
   </style>
 </head>
-
 <body>
 
-  <header>
-    <h1>SportU</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="matches.html">Matches</a>
-      <a href="news.html">News</a>
-    </nav>
-  </header>
+<header>
+  <h1>SportU</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="live.html">Matches</a>
+    <a href="#">News</a>
+  </nav>
+</header>
 
-  <main>
-    <h2>📅 Upcoming Cricket Matches</h2>
-    <p class="subtitle">Stay updated with scheduled cricket matches</p>
+<main>
+  <div class="title">🏏 Live Cricket Scores</div>
+  <div class="subtitle">Live and upcoming cricket matches</div>
 
-    <div id="matches">Loading upcoming matches…</div>
+  <div id="matches">Loading matches…</div>
+</main>
 
-    <footer>© 2026 SportU</footer>
-  </main>
+<footer>
+  © 2026 SportU
+</footer>
 
-  <script>
-    const container = document.getElementById("matches");
+<script>
+  /************************************************
+   🔑 STEP 1: ADD YOUR API KEY BELOW
+   ************************************************/
 
-    const options = {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": "b301206b-3121-452c-a1dc-ea6e56e317f9",
-        "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com"
+  const API_KEY = "b301206b-3121-452c-a1dc-ea6e56e317f9"; // ← PASTE YOUR KEY BETWEEN QUOTES
+
+  /************************************************
+   🔗 STEP 2: API ENDPOINT
+   ************************************************/
+
+  const API_URL =
+    "https://api.cricketdata.org/v1/matches?apikey=" + API_KEY;
+
+  /************************************************
+   ⚙️ STEP 3: FETCH MATCH DATA
+   ************************************************/
+
+  fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+      console.log("API response:", data);
+
+      const matchesDiv = document.getElementById("matches");
+      matchesDiv.innerHTML = "";
+
+      // CHANGE THIS if your API uses a different field
+      const matches = data.data || data.matches || [];
+
+      if (!matches || matches.length === 0) {
+        matchesDiv.innerHTML = "No live or upcoming matches right now.";
+        return;
       }
-    };
 
-    fetch("https://cricbuzz-cricket.p.rapidapi.com/matches/v1/upcoming", options)
-      .then(response => response.json())
-      .then(data => {
-        container.innerHTML = "";
+      matches.forEach(match => {
+        const div = document.createElement("div");
+        div.className = "match";
 
-        if (!data || !data.typeMatches) {
-          container.innerHTML = "No upcoming matches found.";
-          return;
-        }
+        div.innerHTML = `
+          <h3>${match.name || "Cricket Match"}</h3>
+          <p><strong>Status:</strong> ${match.status || "N/A"}</p>
+          <p><strong>Teams:</strong> ${match.team1 || ""} vs ${match.team2 || ""}</p>
+          <p><strong>Venue:</strong> ${match.venue || "TBA"}</p>
+        `;
 
-        data.typeMatches.forEach(type => {
-          type.seriesMatches.forEach(series => {
-            if (!series.seriesAdWrapper) return;
-
-            series.seriesAdWrapper.matches.forEach(match => {
-              const info = match.matchInfo;
-              const div = document.createElement("div");
-              div.className = "match-card";
-              div.innerHTML = `
-                <strong>${info.team1.teamName} vs ${info.team2.teamName}</strong>
-                <div class="match-meta">
-                  🏟 ${info.venueInfo.ground}, ${info.venueInfo.city}<br>
-                  ⏰ ${new Date(info.startDate).toLocaleString()}
-                </div>
-              `;
-              container.appendChild(div);
-            });
-          });
-        });
-      })
-      .catch(error => {
-        console.error(error);
-        container.innerHTML = "Unable to load matches at the moment.";
+        matchesDiv.appendChild(div);
       });
-  </script>
+    })
+    .catch(error => {
+      console.error(error);
+      document.getElementById("matches").innerHTML =
+        "Error loading match data.";
+    });
+</script>
 
 </body>
 </html>
