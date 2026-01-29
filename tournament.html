@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tournament – SportU</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" id="tournament"></div>
+
+<script src="data.js"></script>
+<script>
+  const id = new URLSearchParams(window.location.search).get("id");
+  const t = tournaments.find(t => t.id == id);
+
+  document.getElementById("tournament").innerHTML = `
+    <h2>${t.name}</h2>
+    <p>Location: ${t.location}</p>
+    <p>Teams: ${t.teams.join(", ")}</p>
+  `;
+</script>
+
+</body>
+</html>
