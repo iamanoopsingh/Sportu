@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Matches | SportU</title>
+  <title>Matches</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>🏏 Matches</h2>
-<a href="create-match.html">➕ Create Match</a>
+<h2>Matches</h2>
 
-<div id="matchList"></div>
+<a href="create-match.html">+ Create Match</a>
+
+<div id="matches"></div>
 
 <script src="data.js"></script>
+
 <script>
-const container = document.getElementById("matchList");
-const allMatches = getAllMatches();
+const matchesDiv = document.getElementById("matches");
+const matches = getAllMatches();
 
-if (allMatches.length === 0) {
-  container.innerHTML = "<p>No matches created yet.</p>";
+if (matches.length === 0) {
+  matchesDiv.innerHTML = "<p>No matches yet</p>";
+} else {
+  matches.forEach(match => {
+    matchesDiv.innerHTML += `
+      <div class="card">
+        <h3>${match.team1} vs ${match.team2}</h3>
+        <p>${match.date} | ${match.venue}</p>
+        <p>Status: ${match.status}</p>
+      </div>
+    `;
+  });
 }
-
-allMatches.forEach(match => {
-  const div = document.createElement("div");
-  div.className = "card";
-  div.innerHTML = `
-    <h3>${match.team1} vs ${match.team2}</h3>
-    <p>${match.date} | ${match.venue}</p>
-    <p>Status: ${match.status}</p>
-    <a href="match.html?id=${match.id}">View Match</a>
-  `;
-  container.appendChild(div);
-});
 </script>
 
 </body>
