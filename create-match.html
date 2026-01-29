@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Create Match | SportU</title>
+  <title>Create Match</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>➕ Create Match</h2>
+<h2>Create Match</h2>
 
 <form id="matchForm">
-  <input placeholder="Team 1" required id="team1"><br>
-  <input placeholder="Team 2" required id="team2"><br>
-  <input placeholder="Date" required id="date"><br>
-  <input placeholder="Venue" required id="venue"><br>
+  <input type="text" id="team1" placeholder="Team 1" required><br><br>
+  <input type="text" id="team2" placeholder="Team 2" required><br><br>
+  <input type="date" id="date" required><br><br>
+  <input type="text" id="venue" placeholder="Venue" required><br><br>
+
   <button type="submit">Create Match</button>
 </form>
 
 <script src="data.js"></script>
+
 <script>
-document.getElementById("matchForm").addEventListener("submit", e => {
+document.getElementById("matchForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const match = {
@@ -34,6 +36,7 @@ document.getElementById("matchForm").addEventListener("submit", e => {
   };
 
   saveMatch(match);
+  alert("Match Created Successfully!");
   window.location.href = "matches.html";
 });
 </script>
