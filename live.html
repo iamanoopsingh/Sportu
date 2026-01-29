@@ -1,32 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Live Scores - Sportu</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Live Cricket Scores | SportU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1d3a, #020b1c);
+      color: white;
+    }
+    header {
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      background: #081a33;
+    }
+    .match {
+      background: #102b55;
+      margin: 15px;
+      padding: 15px;
+      border-radius: 12px;
+    }
+    .status {
+      color: #ffd700;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Sportu</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="matches.html">Matches</a>
-    <a href="news.html">News</a>
-  </nav>
-</header>
+<header>🏏 Live Cricket – SportU</header>
 
-<main class="container">
-  <h2>🏏 Live Scores</h2>
-  <p>Live cricket, football and other sports scores will appear here.</p>
+<div id="matches">
+  Loading live matches...
+</div>
 
-  <div class="card">
-    Match data coming soon…
-  </div>
-</main>
+<script>
+const url = "https://free-cricbuzz-cricket.p.rapidapi.com/cricket-live-score";
+const options = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Key": "free-cricbuzz-cricket-api.p.rapidapi.com",
+    "X-RapidAPI-Host": "free-cricbuzz-cricket.p.rapidapi.com"
+  }
+};
 
-<footer>
-  © 2026 Sportu
-</footer>
+fetch(url, options)
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("matches");
+    container.innerHTML = "";
+
+    if (!data || !data.matches) {
+      container.innerHTML = "No live matches right now.";
+      return;
+    }
+
+    data.matches.forEach(match => {
+      const div = document.createElement("div");
+      div.className = "match";
+      div.innerHTML = `
+        <h3>${match.team1} vs ${match.team2}</h3>
+        <p>${match.score}</p>
+        <p class="status">${match.status}</p>
+      `;
+      container.appendChild(div);
+    });
+  })
+  .catch(err => {
+    document.getElementById("matches").innerHTML = "Error loading data.";
+    console.error(err);
+  });
+</script>
 
 </body>
 </html>
