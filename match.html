@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Match – SportU</title>
+  <title>Match | SportU</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container" id="match"></div>
+<div id="match"></div>
+
+<button onclick="addRun()">+1 Run</button>
+<button onclick="addWicket()">Wicket</button>
+<button onclick="addOver()">Over</button>
 
 <script src="data.js"></script>
 <script>
-  const id = new URLSearchParams(window.location.search).get("id");
-  const match = matches.find(m => m.id == id);
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+let match = getMatchById(id);
 
-  document.getElementById("match").innerHTML = `
+const box = document.getElementById("match");
+
+function render() {
+  box.innerHTML = `
     <h2>${match.team1} vs ${match.team2}</h2>
-    <p>Date: ${match.date}</p>
-    <p>Venue: ${match.venue}</p>
-    <p>Status: ${match.status}</p>
+    <p>${match.date} | ${match.venue}</p>
+    <h3>${match.runs}/${match.wickets} (${match.overs} overs)</h3>
   `;
+}
+
+function update() {
+  let saved = getSavedMatches();
+  saved = saved.map(m => m.id == match.id ? match : m);
+  localStorage.setItem("matches", JSON.stringify(saved));
+  render();
+}
+
+function addRun() { match.runs++; update(); }
+function addWicket() { match.wickets++; update(); }
+function addOver() { match.overs++; update(); }
+
+render();
 </script>
 
 </body>
