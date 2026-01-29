@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Create Match Test</title>
+  <title>Create Match | SportU</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<h2>Create Match – TEST</h2>
+<h2>Create Match</h2>
 
-<button id="testBtn">CLICK ME</button>
+<form id="matchForm">
+  <input type="text" id="team1" placeholder="Team 1" required><br><br>
+  <input type="text" id="team2" placeholder="Team 2" required><br><br>
+  <input type="date" id="date" required><br><br>
+  <input type="text" id="venue" placeholder="Venue" required><br><br>
+  <button type="submit">Create Match</button>
+</form>
 
 <script>
-document.getElementById("testBtn").onclick = function () {
-  alert("BUTTON CLICK WORKS ✅");
-};
+document.getElementById("matchForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const team1 = document.getElementById("team1").value;
+  const team2 = document.getElementById("team2").value;
+  const date = document.getElementById("date").value;
+  const venue = document.getElementById("venue").value;
+
+  const match = {
+    id: Date.now(),
+    team1,
+    team2,
+    date,
+    venue,
+    status: "Upcoming",
+    runs: 0,
+    wickets: 0,
+    overs: 0
+  };
+
+  let matches = JSON.parse(localStorage.getItem("matches")) || [];
+  matches.push(match);
+  localStorage.setItem("matches", JSON.stringify(matches));
+
+  alert("✅ Match Created Successfully");
+  window.location.href = "matches.html";
+});
 </script>
 
 </body>
