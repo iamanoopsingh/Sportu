@@ -6,34 +6,36 @@
 </head>
 <body>
 
-<h2>Create Match</h2>
+<h2>➕ Create Match</h2>
 
-<div class="card">
-  <input id="team1" placeholder="Team 1"><br><br>
-  <input id="team2" placeholder="Team 2"><br><br>
-  <input id="date" placeholder="Match Date"><br><br>
-  <input id="venue" placeholder="Venue"><br><br>
-  <button onclick="saveMatch()">Create Match</button>
-</div>
+<form id="matchForm">
+  <input placeholder="Team 1" required id="team1"><br>
+  <input placeholder="Team 2" required id="team2"><br>
+  <input placeholder="Date" required id="date"><br>
+  <input placeholder="Venue" required id="venue"><br>
+  <button type="submit">Create Match</button>
+</form>
 
+<script src="data.js"></script>
 <script>
-function saveMatch() {
+document.getElementById("matchForm").addEventListener("submit", e => {
+  e.preventDefault();
+
   const match = {
     id: Date.now(),
     team1: team1.value,
     team2: team2.value,
     date: date.value,
     venue: venue.value,
-    status: "Upcoming"
+    status: "Upcoming",
+    runs: 0,
+    wickets: 0,
+    overs: 0
   };
 
-  const matches = JSON.parse(localStorage.getItem("matches")) || [];
-  matches.push(match);
-  localStorage.setItem("matches", JSON.stringify(matches));
-
-  alert("Match created!");
+  saveMatch(match);
   window.location.href = "matches.html";
-}
+});
 </script>
 
 </body>
