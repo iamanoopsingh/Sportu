@@ -1,49 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Create Match | SportU</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Match</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Create Match</h2>
+<nav>
+  <a href="matches.html">← Back</a>
+</nav>
+
+<h1>Create Match</h1>
 
 <form id="matchForm">
-  <input type="text" id="team1" placeholder="Team 1" required><br><br>
-  <input type="text" id="team2" placeholder="Team 2" required><br><br>
-  <input type="date" id="date" required><br><br>
-  <input type="text" id="venue" placeholder="Venue" required><br><br>
-  <button type="submit">Create Match</button>
+  <input placeholder="Team A" required><br><br>
+  <input placeholder="Team B" required><br><br>
+  <input type="date" required><br><br>
+  <input placeholder="Location" required><br><br>
+  <button type="submit">Create</button>
 </form>
 
+<script src="data.js"></script>
 <script>
-document.getElementById("matchForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+  document.getElementById("matchForm").onsubmit = function(e) {
+    e.preventDefault();
 
-  const team1 = document.getElementById("team1").value;
-  const team2 = document.getElementById("team2").value;
-  const date = document.getElementById("date").value;
-  const venue = document.getElementById("venue").value;
+    const inputs = e.target.elements;
+    const matches = getMatches();
 
-  const match = {
-    id: Date.now(),
-    team1,
-    team2,
-    date,
-    venue,
-    status: "Upcoming",
-    runs: 0,
-    wickets: 0,
-    overs: 0
+    matches.push({
+      teamA: inputs[0].value,
+      teamB: inputs[1].value,
+      date: inputs[2].value,
+      location: inputs[3].value
+    });
+
+    saveMatches(matches);
+    window.location.href = "matches.html";
   };
-
-  let matches = JSON.parse(localStorage.getItem("matches")) || [];
-  matches.push(match);
-  localStorage.setItem("matches", JSON.stringify(matches));
-
-  alert("✅ Match Created Successfully");
-  window.location.href = "matches.html";
-});
 </script>
 
 </body>
