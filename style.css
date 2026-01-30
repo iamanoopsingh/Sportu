@@ -1,37 +1,24 @@
 body {
   font-family: Arial;
-  margin: 0;
   background: #0b1d3a;
   color: white;
-}
-
-header {
-  padding: 15px;
-  background: #08162e;
+  padding: 20px;
 }
 
 nav a {
   margin-right: 15px;
-  color: white;
+  color: #00c3ff;
   text-decoration: none;
 }
 
-.hero {
-  padding: 40px;
-  text-align: center;
-}
-
-.container {
-  padding: 20px;
-}
-
 .card {
-  background: #122b4f;
+  background: #132f5e;
   padding: 15px;
-  margin-bottom: 15px;
+  margin: 10px 0;
   border-radius: 8px;
 }
 
-a {
-  color: #4db8ff;
+input, button {
+  padding: 8px;
+  width: 90%;
 }
