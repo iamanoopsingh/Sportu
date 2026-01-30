@@ -22,14 +22,18 @@
   const matches = getMatches();
   const container = document.getElementById("matches");
 
-  if (matches.length === 0) {
+  if (!matches || matches.length === 0) {
     container.innerHTML = "<p>No matches created yet.</p>";
   } else {
     matches.forEach((m, i) => {
+      const teamA = m.teamA || m.team1 || "Team A";
+      const teamB = m.teamB || m.team2 || "Team B";
+      const location = m.location || m.venue || "Unknown";
+
       container.innerHTML += `
         <div class="card">
-          <h3>${m.teamA} vs ${m.teamB}</h3>
-          <p>${m.date} | ${m.location}</p>
+          <h3>${teamA} vs ${teamB}</h3>
+          <p>${m.date || ""} | ${location}</p>
           <a href="match.html?id=${i}">View Match</a>
         </div>
       `;
