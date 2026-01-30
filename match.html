@@ -2,37 +2,33 @@
 <html>
 <head>
   <title>Match Details</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <style>
+    body { background:#0b1f3a; color:#fff; font-family:Arial }
+    .box { background:#132e57; padding:20px; border-radius:10px }
+    a { color:#4da3ff }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="matches.html">← Back to Matches</a>
-</nav>
+<a href="matches.html">← Back to Matches</a>
 
-<h1>Match Details</h1>
+<div id="match" class="box"></div>
 
-<div id="matchDetails"></div>
-
-<script src="data.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
   const matches = getMatches();
   const match = matches[id];
-  const container = document.getElementById("matchDetails");
 
   if (!match) {
-    container.innerHTML = "<p>Match not found.</p>";
+    document.getElementById("match").innerHTML = "<p>Match not found</p>";
   } else {
-    container.innerHTML = `
-      <div class="card">
-        <h2>${match.teamA} vs ${match.teamB}</h2>
-        <p><strong>Date:</strong> ${match.date}</p>
-        <p><strong>Location:</strong> ${match.location}</p>
-        <p><strong>Status:</strong> Upcoming</p>
-      </div>
+    document.getElementById("match").innerHTML = `
+      <h2>${match.teamA} vs ${match.teamB}</h2>
+      <p><strong>Date:</strong> ${match.date}</p>
+      <p><strong>Location:</strong> ${match.location}</p>
     `;
   }
 </script>
