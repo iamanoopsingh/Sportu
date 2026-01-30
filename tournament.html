@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tournament – SportU</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Tournament Details</title>
+  <script src="data.js"></script>
+  <style>
+    body { background:#0b1f3a; color:#fff; font-family:Arial }
+    .box { background:#132e57; padding:20px; border-radius:10px }
+    a { color:#4da3ff }
+  </style>
 </head>
 <body>
 
-<div class="container" id="tournament"></div>
+<a href="tournaments.html">← Back to Tournaments</a>
 
-<script src="data.js"></script>
+<div id="tournament" class="box"></div>
+
 <script>
-  const id = new URLSearchParams(window.location.search).get("id");
-  const t = tournaments.find(t => t.id == id);
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-  document.getElementById("tournament").innerHTML = `
-    <h2>${t.name}</h2>
-    <p>Location: ${t.location}</p>
-    <p>Teams: ${t.teams.join(", ")}</p>
-  `;
+  const tournaments = getTournaments();
+  const t = tournaments[id];
+
+  if (!t) {
+    document.getElementById("tournament").innerHTML = "<p>Tournament not found</p>";
+  } else {
+    document.getElementById("tournament").innerHTML = `
+      <h2>${t.name}</h2>
+      <p><strong>Start:</strong> ${t.startDate}</p>
+      <p><strong>End:</strong> ${t.endDate}</p>
+      <p><strong>Location:</strong> ${t.location || "Not specified"}</p>
+    `;
+  }
 </script>
 
 </body>
