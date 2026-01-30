@@ -2,38 +2,37 @@
 <html>
 <head>
   <title>Tournaments</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <style>
+    body { background:#0b1f3a; color:#fff; font-family:Arial }
+    .card { background:#132e57; padding:15px; margin:10px 0; border-radius:8px }
+    a { color:#4da3ff; text-decoration:none }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="matches.html">Matches</a>
-  <a href="tournaments.html">Tournaments</a>
-</nav>
-
-<h1>Tournaments</h1>
+<h2>Tournaments</h2>
 <a href="create-tournament.html">+ Create Tournament</a>
 
 <div id="tournaments"></div>
 
-<script src="data.js"></script>
 <script>
-  const tournaments = getTournaments();
   const container = document.getElementById("tournaments");
+  const tournaments = getTournaments();
 
   if (tournaments.length === 0) {
-    container.innerHTML = "<p>No tournaments created yet.</p>";
-  } else {
-    tournaments.forEach(t => {
-      container.innerHTML += `
-        <div class="card">
-          <h3>${t.name}</h3>
-          <p>${t.location}</p>
-        </div>
-      `;
-    });
+    container.innerHTML = "<p>No tournaments created</p>";
   }
+
+  tournaments.forEach((t, i) => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${t.name}</h3>
+        <p>${t.startDate} - ${t.endDate}</p>
+        <a href="tournament.html?id=${i}">View Tournament</a>
+      </div>
+    `;
+  });
 </script>
 
 </body>
