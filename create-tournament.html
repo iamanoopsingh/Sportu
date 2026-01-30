@@ -2,38 +2,47 @@
 <html>
 <head>
   <title>Create Tournament</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <style>
+    body { background:#0b1f3a; color:#fff; font-family:Arial }
+    input, button {
+      display:block;
+      margin:10px 0;
+      padding:10px;
+      width:100%;
+      max-width:300px;
+    }
+    button { background:#4da3ff; border:none; cursor:pointer }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="tournaments.html">← Back</a>
-</nav>
-
-<h1>Create Tournament</h1>
+<h2>Create Tournament</h2>
 
 <form id="tournamentForm">
-  <input placeholder="Tournament Name" required><br><br>
-  <input placeholder="Location" required><br><br>
-  <button type="submit">Create</button>
+  <input type="text" id="name" placeholder="Tournament Name" required>
+  <input type="date" id="startDate" required>
+  <input type="date" id="endDate" required>
+  <input type="text" id="location" placeholder="Location">
+  <button type="submit">Create Tournament</button>
 </form>
 
-<script src="data.js"></script>
 <script>
-  document.getElementById("tournamentForm").onsubmit = function(e) {
+  document.getElementById("tournamentForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const inputs = e.target.elements;
-    const tournaments = getTournaments();
+    const tournament = {
+      name: document.getElementById("name").value,
+      startDate: document.getElementById("startDate").value,
+      endDate: document.getElementById("endDate").value,
+      location: document.getElementById("location").value
+    };
 
-    tournaments.push({
-      name: inputs[0].value,
-      location: inputs[1].value
-    });
+    addTournament(tournament);
 
-    saveTournaments(tournaments);
+    alert("Tournament created successfully!");
     window.location.href = "tournaments.html";
-  };
+  });
 </script>
 
 </body>
