@@ -1,47 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Tournaments | SportU</title>
+  <title>Tournaments</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <h1>🏆 Tournaments</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="matches.html">Matches</a>
-    <a href="create-tournament.html">➕ Create Tournament</a>
-  </nav>
-</header>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="matches.html">Matches</a>
+  <a href="tournaments.html">Tournaments</a>
+</nav>
 
-<div class="container" id="tournaments"></div>
+<h1>Tournaments</h1>
+<a href="create-tournament.html">+ Create Tournament</a>
+
+<div id="tournaments"></div>
 
 <script src="data.js"></script>
 <script>
+  const tournaments = getTournaments();
   const container = document.getElementById("tournaments");
 
-  // Get tournaments created by user
-  const savedTournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
-
-  // Combine default + created tournaments
-  const allTournaments = [...tournaments, ...savedTournaments];
-
-  if (allTournaments.length === 0) {
+  if (tournaments.length === 0) {
     container.innerHTML = "<p>No tournaments created yet.</p>";
+  } else {
+    tournaments.forEach(t => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${t.name}</h3>
+          <p>${t.location}</p>
+        </div>
+      `;
+    });
   }
-
-  allTournaments.forEach(t => {
-    container.innerHTML += `
-      <div class="card">
-        <h3>${t.name}</h3>
-        <p>Location: ${t.location}</p>
-        <p>Teams: ${t.teams.length}</p>
-        <a href="tournament.html?id=${t.id}">View Tournament</a>
-      </div>
-    `;
-  });
 </script>
 
 </body>
