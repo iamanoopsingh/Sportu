@@ -2,50 +2,38 @@
 <html>
 <head>
   <title>Matches</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      background: #0b1d3a;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 15px;
-    }
-    .match {
-      background: #132c52;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    a {
-      color: #4da3ff;
-      text-decoration: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Matches</h2>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="matches.html">Matches</a>
+  <a href="tournaments.html">Tournaments</a>
+</nav>
+
+<h1>Matches</h1>
 <a href="create-match.html">+ Create Match</a>
 
-<div id="matchList"></div>
+<div id="matches"></div>
 
+<script src="data.js"></script>
 <script>
-const matchList = document.getElementById("matchList");
-const matches = JSON.parse(localStorage.getItem("matches")) || [];
+  const matches = getMatches();
+  const container = document.getElementById("matches");
 
-if (matches.length === 0) {
-  matchList.innerHTML = "<p>No matches created yet.</p>";
-} else {
-  matches.forEach(match => {
-    matchList.innerHTML += `
-      <div class="match">
-        <strong>${match.team1} vs ${match.team2}</strong><br>
-        ${match.date} | ${match.venue}<br>
-        Status: ${match.status}
-      </div>
-    `;
-  });
-}
+  if (matches.length === 0) {
+    container.innerHTML = "<p>No matches created yet.</p>";
+  } else {
+    matches.forEach((m, i) => {
+      container.innerHTML += `
+        <div class="card">
+          <h3>${m.teamA} vs ${m.teamB}</h3>
+          <p>${m.date} | ${m.location}</p>
+        </div>
+      `;
+    });
+  }
 </script>
 
 </body>
