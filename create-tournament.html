@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Create Tournament | SportU</title>
+  <title>Create Tournament</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Create Tournament</h2>
+<nav>
+  <a href="tournaments.html">← Back</a>
+</nav>
 
-<div class="card">
-  <input id="name" placeholder="Tournament Name"><br><br>
-  <input id="location" placeholder="Location"><br><br>
-  <input id="teams" placeholder="Teams (comma separated)"><br><br>
-  <button onclick="saveTournament()">Create Tournament</button>
-</div>
+<h1>Create Tournament</h1>
 
+<form id="tournamentForm">
+  <input placeholder="Tournament Name" required><br><br>
+  <input placeholder="Location" required><br><br>
+  <button type="submit">Create</button>
+</form>
+
+<script src="data.js"></script>
 <script>
-function saveTournament() {
-  const tournament = {
-    id: Date.now(),
-    name: name.value,
-    location: location.value,
-    teams: teams.value.split(",")
+  document.getElementById("tournamentForm").onsubmit = function(e) {
+    e.preventDefault();
+
+    const inputs = e.target.elements;
+    const tournaments = getTournaments();
+
+    tournaments.push({
+      name: inputs[0].value,
+      location: inputs[1].value
+    });
+
+    saveTournaments(tournaments);
+    window.location.href = "tournaments.html";
   };
-
-  const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
-  tournaments.push(tournament);
-  localStorage.setItem("tournaments", JSON.stringify(tournaments));
-
-  alert("Tournament created!");
-  window.location.href = "tournaments.html";
-}
 </script>
 
 </body>
